@@ -1,10 +1,23 @@
 ﻿using System.IO;
 using System.Text;
 
-Console.WriteLine("Введите строку:");
-string input = Console.ReadLine();
-string[] words = input.Split(" ", StringSplitOptions.RemoveEmptyEntries);
 string filePath = "../../../TextFile.txt";
+string? input;
+
+StreamReader reader = new StreamReader(filePath);
+
+while (true)
+{
+    input = reader.ReadLine() ?? Console.ReadLine();
+
+    if (input != null && input != "") break;
+
+    Console.WriteLine("Введите строку:");
+}
+
+reader.Close();
+
+string[] words = input.Split(" ", StringSplitOptions.RemoveEmptyEntries);
 
 int taskNum = 6, num = 1;
 
@@ -15,12 +28,15 @@ while (num <= taskNum)
     switch (num)
     {
         case 1:
+            Console.WriteLine("Слова, содержащие максимальное количество цифр:");
             executeTask1(words);
             break;
-        case 2: 
+        case 2:
+            Console.WriteLine("Самое длинное слово и количество раз, которое оно встретилось в тексте:");
             executeTask2(words);
             break;
         case 3:
+            Console.WriteLine("Замена цифр от 0 до 9 на слова «ноль», «один», ..., «девять»:");
             Console.WriteLine(GetNumReplaceStr(input));
             break;
         case 4:
@@ -30,9 +46,11 @@ while (num <= taskNum)
             GetSentencesByType(filePath, "!");
             break; 
         case 5:
+            Console.WriteLine("Предложения без запятых:");
             GetSentencesWoSymbol(filePath, ",");
             break;
         case 6:
+            Console.WriteLine("Слова, начинающиеся и заканчивающиеся на одну и ту же букву:");
             ShowWordsWithSameEnds(words);
             break;
     }
@@ -82,12 +100,16 @@ static void executeTask2(string[] arr)
     for (int i = 0; i < sortedArr.Count; i++)
     {
         if (!maxWordsCnt.Keys.Contains(sortedArr[i]))
+        {
             maxWordsCnt.Add(sortedArr[i], 1);
+        }
 
         if (i == (sortedArr.Count - 1)) break;
-         
+
         if (sortedArr[i] == sortedArr[i + 1])
-           maxWordsCnt[sortedArr[i]]++;
+        {
+            maxWordsCnt[sortedArr[i]]++;
+        }
     }
 
     sortedArr = sortedArr.Distinct().ToList();
@@ -161,8 +183,10 @@ static void GetSentencesByType(string filePath, string sentenceType)
 
     while ((line = reader.ReadLine()) != null)
     {
-        if (line.Trim().EndsWith(sentenceType)) 
+        if (line.Trim().EndsWith(sentenceType))
+        {
             Console.WriteLine(line);
+        }
     }
 
     reader.Close();
@@ -177,7 +201,9 @@ static void GetSentencesWoSymbol(string filePath, string symbol)
     while ((line = reader.ReadLine()) != null)
     {
         if (line.Trim().IndexOf(symbol) == -1)
+        {
             Console.WriteLine(line);
+        }
     }
 
     reader.Close();
@@ -187,8 +213,10 @@ static void ShowWordsWithSameEnds(string[] arr)
 {
     foreach (string word in arr)
     {
-        if (word[0] == word[word.Length - 1])
+        if ((word[0] == word[word.Length - 1]) && char.IsLetter(word[0]))
+        {
             Console.Write(word + " ");
+        }
     }
 
     Console.WriteLine();
